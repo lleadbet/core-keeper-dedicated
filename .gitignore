@@ -1,2 +1,5 @@
 /docker-compose-example/server-files
 /docker-compose-example/server-data
+server-data
+server-files
+logs.txt

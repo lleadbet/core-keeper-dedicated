@@ -18,7 +18,9 @@ add_param() {
 logfile="${STEAMAPPDIR}/logs/$(date '+%Y-%m-%d_%H-%M-%S').log"
 params=(
     "-batchmode"
+    "-networkdebug"
     "-logfile" "$logfile"
+    "-extralog"
 )
 
 add_param "-world"      "${WORLD_INDEX}"
