@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Builds the Dockerfile and pushes it to dockerhub and GHCR
+  # Builds the Dockerfile and pushes it to GHCR
   release:
     name: Release - Docker image
     runs-on: ubuntu-latest
@@ -16,12 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Docker - GHCR Login
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up QEMU
@@ -35,7 +35,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            escaping/core-keeper-dedicated
             ghcr.io/${{ github.repository }}
           # generate Docker tags based on the following events/attributes
           tags: |
@@ -45,7 +44,7 @@ jobs:
             type=ref,event=branch
             type=sha,prefix={{branch}}-
           flavor: latest=true
-      
+
       - name: Docker - Build / Push
         id: docker_build
         uses: docker/build-push-action@v5
@@ -53,10 +52,3 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-        
-#     - name: Update repo description
-#       uses: peter-evans/dockerhub-description@v2
-#       with:
-#         username: ${{ secrets.DOCKER_USERNAME }}
-#         password: ${{ secrets.DOCKER_PASSWORD }}
-#         repository: arguser/core-keeper-dedicated
