@@ -2,7 +2,7 @@
 # Dockerfile that builds a Core Keeper Gameserver
 ###########################################################
 FROM cm2network/steamcmd:root AS base-amd64
-FROM --platform=arm64 sonroyaalmerol/steamcmd-arm64:root-2025-04-13 AS base-arm64
+FROM --platform=arm64 sonroyaalmerol/steamcmd-arm64:root-2026-02-15 AS base-arm64
 
 ARG TARGETARCH
 FROM base-${TARGETARCH}
@@ -36,7 +36,9 @@ RUN set -x \
         jq \
         gettext-base \
         unzip \
-	wget \
+		libatomic1 \
+		libpulse0 \
+	    wget \
     && rm -rf /var/lib/apt/lists/*
 
 RUN case "${TARGETARCH}" in \
@@ -47,8 +49,6 @@ RUN case "${TARGETARCH}" in \
             libxcursor1 \
             libxinerama1 \
             libxss1 \
-            libatomic1 \
-            libpulse0 \
 	&& rm -rf /var/lib/apt/lists/* ;; \
     esac
 
